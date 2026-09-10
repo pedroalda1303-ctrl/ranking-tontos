@@ -1,0 +1,1287 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Ranking dos Tontos 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,500;0,6..96,700;1,6..96,400&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --moss:#262d21;
+  --moss-2:#2f3728;
+  --moss-3:#3a4433;
+  --cream:#f2efe3;
+  --cream-2:#e0ddcd;
+  --cream-3:#bdbcaa;
+  --hair:rgba(242,239,227,.2);
+  --hair-2:rgba(242,239,227,.4);
+  --ball:#dfe86a;
+  --late:#d98a6a;
+  --radius:4px;
+  --serif:"Bodoni Moda",Didot,Georgia,serif;
+  --sans:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0;background:var(--moss);color:var(--cream);
+  font-family:var(--sans);font-size:16px;line-height:1.65;font-optical-sizing:auto;
+  font-variant-numeric:tabular-nums;-webkit-font-smoothing:antialiased;
+}
+h1,h2,h3{margin:0;font-family:var(--serif);font-weight:400;letter-spacing:.01em}
+
+/* masthead */
+.masthead{max-width:960px;margin:0 auto;padding:52px 20px 44px;text-align:center}
+.badge{display:inline-block;border:1px solid var(--hair-2);padding:9px 20px;
+  font-size:11.5px;font-weight:500;letter-spacing:.22em;text-transform:uppercase;color:var(--cream-2)}
+.kicker{margin-top:34px;font-size:11.5px;font-weight:500;letter-spacing:.24em;
+  text-transform:uppercase;color:var(--cream-3)}
+.masthead .big{font-family:var(--serif);font-weight:400;font-size:78px;line-height:1;
+  letter-spacing:.1em;text-transform:uppercase;margin:14px 0 0;text-indent:.1em}
+.masthead .sub{font-family:var(--serif);font-weight:500;font-size:18px;letter-spacing:.18em;
+  text-transform:uppercase;color:var(--cream-2);margin-top:16px}
+/* selo */
+.crest{display:flex;align-items:center;justify-content:center;gap:18px;margin:0 0 18px}
+.crest span{font-size:11.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--cream-3)}
+.crest div{width:54px;height:54px;border:1px solid var(--hair-2);border-radius:50%;
+  display:flex;align-items:center;justify-content:center;font-family:var(--serif);
+  font-size:19px;letter-spacing:.06em;color:var(--cream-2)}
+
+/* navegação */
+.navbar{position:sticky;top:0;z-index:20;background:rgba(38,45,33,.95);
+  backdrop-filter:blur(10px);border-top:1px solid var(--hair);border-bottom:1px solid var(--hair)}
+.navbar-in{max-width:960px;margin:0 auto;padding:0 20px;display:flex;align-items:center;gap:20px}
+nav{display:flex;gap:26px;overflow-x:auto;scrollbar-width:none;flex:1}
+nav::-webkit-scrollbar{display:none}
+nav button{background:none;border:0;border-bottom:1.5px solid transparent;color:var(--cream-2);
+  font-family:var(--sans);font-size:13px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;
+  padding:16px 0 14px;cursor:pointer;white-space:nowrap}
+nav button:hover{color:var(--cream)}
+nav button.active{color:var(--cream);border-bottom-color:var(--ball)}
+.sync{display:flex;align-items:center;gap:9px;font-size:13px;color:var(--cream-3);white-space:nowrap}
+.dot{width:6px;height:6px;border-radius:50%;background:var(--ball);flex:none}
+.dot.busy{background:var(--cream-2)}
+.dot.warn{background:var(--late)}
+.linkish{background:none;border:0;color:var(--cream-2);font:inherit;font-size:13px;cursor:pointer;
+  text-decoration:underline;text-underline-offset:3px;padding:0}
+.linkish:disabled{opacity:.4;cursor:not-allowed}
+.top-inner{display:none}
+
+main{max-width:960px;margin:0 auto;padding:32px 20px 76px}
+section{display:none}
+section.active{display:block}
+.card{background:var(--moss-2);border:1px solid var(--hair);border-radius:var(--radius);
+  padding:30px;margin-bottom:20px}
+.eyebrow{font-size:12px;font-weight:500;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--cream-3);margin:0 0 10px}
+.card h2{font-size:30px;letter-spacing:.02em}
+.hint{color:var(--cream-2);font-size:15.5px;margin:12px 0 0;max-width:66ch}
+.empty{color:var(--cream-2);font-size:15.5px;text-align:center;padding:30px 0}
+
+/* líder */
+.leader{background:var(--moss-2);border:1px solid var(--hair);border-radius:var(--radius);
+  padding:36px 30px;margin-bottom:20px;position:relative}
+.leader-in{display:flex;align-items:flex-end;gap:22px;flex-wrap:wrap}
+.leader-name{font-family:var(--serif);font-weight:500;font-size:66px;line-height:.92;
+  letter-spacing:.04em;text-transform:uppercase}
+.leader-pts{margin-left:auto;text-align:right}
+.leader-pts b{display:block;font-family:var(--serif);font-size:60px;font-weight:400;
+  line-height:1;color:var(--ball)}
+.leader-pts small{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--cream-3)}
+.chasers{display:flex;gap:26px;flex-wrap:wrap;margin-top:24px;padding-top:18px;
+  border-top:1px solid var(--hair);font-size:15px;color:var(--cream-2)}
+.chasers b{color:var(--cream);font-weight:500}
+
+/* ranking */
+.rank{margin-top:6px}
+.rank-head{display:grid;grid-template-columns:38px 1fr 62px 62px 62px;gap:12px;
+  padding:0 10px 10px;font-size:11.5px;font-weight:500;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--cream-3);border-bottom:1px solid var(--hair-2)}
+.rank-head span:nth-child(n+3){text-align:right}
+.rank-row{display:grid;grid-template-columns:38px 1fr 62px 62px 62px;gap:12px;align-items:center;
+  padding:16px 10px;border-bottom:1px solid var(--hair);cursor:pointer}
+.rank-row:hover{background:var(--moss-3)}
+.rank-row.cut{border-bottom:1px solid var(--hair-2)}
+.rank-pos{font-family:var(--serif);font-size:20px;color:var(--cream-3)}
+.rank-row.top4 .rank-pos{color:var(--ball)}
+.rank-name{font-family:var(--serif);font-size:22px;font-weight:500;letter-spacing:.06em;text-transform:uppercase}
+.rank-bar{height:3px;background:var(--hair);margin-top:8px;max-width:260px;overflow:hidden}
+.rank-bar i{display:block;height:100%;background:var(--ball)}
+.rank-num{text-align:right;font-size:15.5px;color:var(--cream-2)}
+.rank-pts{text-align:right;font-family:var(--serif);font-size:28px;font-weight:500}
+.rank-detail{display:none;padding:14px 12px 20px 50px;font-size:15.5px;color:var(--cream-2);background:var(--moss-3)}
+.rank-row.open{background:var(--moss-3);border-bottom-color:transparent}
+.rank-row.open + .rank-detail{display:block}
+.rank-detail div{padding:7px 0;border-bottom:1px solid var(--hair)}
+.rank-detail div:last-child{border-bottom:0}
+.rank-detail b{font-weight:500;color:var(--cream)}
+.cut-note{font-size:14px;color:var(--cream-2);margin-top:20px;letter-spacing:.02em}
+
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--hair)}
+.stat{background:var(--moss-2);padding:22px}
+.stat b{display:block;font-family:var(--serif);font-size:42px;font-weight:400;line-height:1}
+.stat span{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--cream-3)}
+
+/* rodada */
+.round-head{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;margin-bottom:14px}
+.round-no{font-family:var(--serif);font-size:34px;letter-spacing:.04em;text-transform:uppercase}
+.round-when{font-size:15px;color:var(--cream-2)}
+.round-when b{color:var(--cream);font-weight:500}
+.fixture{display:grid;grid-template-columns:1fr auto;gap:12px;align-items:center;
+  padding:19px 0;border-top:1px solid var(--hair)}
+.fixture-players{font-family:var(--serif);font-size:26px;font-weight:500;letter-spacing:.05em;text-transform:uppercase}
+.fixture-players span{font-family:var(--sans);color:var(--cream-3);font-weight:400;
+  font-size:13px;letter-spacing:.1em;margin:0 12px}
+.chip{font-size:12px;font-weight:500;letter-spacing:.06em;text-transform:uppercase;
+  border:1px solid var(--hair-2);border-radius:999px;padding:6px 14px;color:var(--cream-2);white-space:nowrap}
+.chip.done{border-color:var(--ball);color:var(--ball)}
+.chip.late{border-color:var(--late);color:var(--late)}
+.bye{margin-top:20px;padding-top:16px;border-top:1px solid var(--hair);font-size:15px;color:var(--cream-2);
+  letter-spacing:.02em}
+.bye b{color:var(--cream);font-weight:500}
+.mini-round{display:grid;grid-template-columns:130px 1fr;gap:16px;align-items:baseline;
+  padding:16px 0;border-top:1px solid var(--hair)}
+.mini-when{font-size:12.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--cream-3)}
+.mini-list{font-size:15.5px;color:var(--cream-2)}
+.mini-list em{font-style:normal;color:var(--cream-3)}
+
+/* histórico */
+.filters{display:flex;gap:8px;flex-wrap:wrap;margin:20px 0 8px}
+.filters button{background:none;border:1px solid var(--hair-2);border-radius:999px;
+  padding:7px 15px;font:inherit;font-size:12px;font-weight:500;letter-spacing:.06em;
+  text-transform:uppercase;color:var(--cream-2);cursor:pointer}
+.filters button:hover{border-color:var(--cream-2);color:var(--cream)}
+.filters button.on{background:var(--cream);border-color:var(--cream);color:var(--moss)}
+.match{display:grid;grid-template-columns:70px 1fr auto;gap:18px;align-items:center;
+  padding:18px 0;border-top:1px solid var(--hair)}
+.match-date{font-size:12.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--cream-3)}
+.match-players{font-family:var(--serif);font-size:22px;font-weight:500;letter-spacing:.05em;text-transform:uppercase}
+.match-players span{font-family:var(--sans);color:var(--cream-3);font-weight:400;
+  font-size:13px;letter-spacing:.1em;margin:0 10px}
+.match-meta{font-size:14px;color:var(--cream-2);margin-top:3px}
+.match-meta.wo{color:var(--late)}
+.match-right{display:flex;align-items:center;gap:18px}
+.match-score{font-family:var(--serif);font-size:24px;font-weight:500}
+.match-acts{display:flex;gap:8px}
+
+/* finals, regras, premiação */
+.bracket{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--hair)}
+.tie{border:0;border-radius:0;padding:22px;background:var(--moss-2)}
+.tie span{display:block;font-size:11.5px;font-weight:500;letter-spacing:.12em;
+  text-transform:uppercase;color:var(--cream-3);margin-bottom:10px}
+.tie b{font-family:var(--serif);font-size:20px;font-weight:500;letter-spacing:.04em}
+.tie b span{display:inline;font-family:var(--sans);color:var(--cream-3);font-weight:400;
+  font-size:13px;letter-spacing:.1em;margin:0 8px}
+.rules{margin-top:10px}
+.rule{display:grid;grid-template-columns:190px 1fr;gap:24px;padding:18px 0;border-top:1px solid var(--hair)}
+.rule dt{font-size:12.5px;font-weight:500;letter-spacing:.09em;text-transform:uppercase;color:var(--cream-3);padding-top:3px}
+.rule dd{margin:0;font-size:16px;color:var(--cream)}
+.podium{display:grid;gap:1px;margin-top:20px;background:var(--hair)}
+.step{display:grid;grid-template-columns:60px 1fr auto;gap:20px;align-items:center;
+  border:0;border-radius:0;padding:24px;background:var(--moss-2)}
+.step-pos{font-family:var(--serif);font-size:38px;color:var(--ball);line-height:1}
+.step b{font-family:var(--serif);font-size:22px;font-weight:500;letter-spacing:.05em;text-transform:uppercase}
+.step-what{font-size:14px;color:var(--cream-2)}
+.skewers{font-size:12.5px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:var(--cream-2)}
+
+/* formulário */
+.field{margin-bottom:20px}
+label{display:block;font-size:12.5px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;
+  color:var(--cream-3);margin-bottom:8px}
+input,select,textarea{width:100%;background:var(--moss);color:var(--cream);border:1px solid var(--hair-2);
+  border-radius:var(--radius);padding:12px 13px;font-family:var(--sans);font-size:16px}
+input:hover,select:hover,textarea:hover{border-color:var(--cream-3)}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--ball)}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:20px}
+.who{display:flex;justify-content:space-between;align-items:baseline;font-size:12.5px;
+  letter-spacing:.08em;text-transform:uppercase;color:var(--cream-3);margin:24px 0 4px}
+.who b{font-family:var(--serif);font-weight:500;color:var(--cream);font-size:20px;letter-spacing:.05em}
+.set-line{display:grid;grid-template-columns:1fr 80px 20px 80px;gap:12px;align-items:center;
+  padding:15px 0;border-top:1px solid var(--hair)}
+.set-label{font-size:15px}
+.set-label small{display:block;font-size:13.5px;color:var(--cream-2)}
+.set-x{text-align:center;color:var(--cream-3)}
+.set-line input{text-align:center;font-family:var(--serif);font-size:22px;font-weight:500;padding:9px}
+.btn{font-family:var(--sans);font-size:12.5px;font-weight:500;letter-spacing:.07em;text-transform:uppercase;
+  background:none;color:var(--cream);border:1px solid var(--hair-2);border-radius:999px;
+  padding:11px 22px;cursor:pointer}
+.btn:hover{border-color:var(--cream)}
+.btn.primary{background:var(--ball);border-color:var(--ball);color:#2b3325;font-weight:600}
+.btn.primary:hover{filter:brightness(1.05)}
+.btn.clay{color:var(--late);border-color:rgba(217,138,106,.5)}
+.btn.clay:hover{border-color:var(--late)}
+.btn.mini{font-size:11.5px;padding:7px 14px}
+.btn:disabled{opacity:.4;cursor:not-allowed}
+.actions{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-top:26px}
+.editing{font-size:12.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--ball)}
+
+.warn{display:none;border:1px solid var(--late);border-radius:var(--radius);
+  padding:16px 18px;margin-bottom:20px;font-size:15px;background:rgba(217,138,106,.1)}
+.warn code{background:rgba(0,0,0,.25);padding:2px 6px;border-radius:3px}
+#toast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%) translateY(10px);
+  background:var(--cream);color:var(--moss);font-size:15px;font-weight:500;padding:13px 24px;
+  border-radius:999px;opacity:0;pointer-events:none;transition:opacity .18s,transform .18s;
+  z-index:60;max-width:90vw;text-align:center}
+#toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+#toast.bad{background:var(--late);color:#2b1a12}
+footer{max-width:960px;margin:0 auto;padding:0 20px 48px;color:var(--cream-2);
+  font-size:12px;letter-spacing:.1em;text-transform:uppercase;text-align:center}
+
+@media(max-width:720px){
+  .masthead{padding:38px 20px 28px}
+  .masthead .big{font-size:44px;letter-spacing:.08em}
+  .masthead .sub{font-size:13px;letter-spacing:.2em}
+  .kicker{margin-top:26px}
+  .leader-name{font-size:44px}
+  .leader-pts b{font-size:42px}
+  .card{padding:22px}
+  .card h2{font-size:25px}
+  .rank-head{display:none}
+  .rank-row{grid-template-columns:30px 1fr 60px;padding:15px 6px}
+  .rank-row .rank-num{display:none}
+  .rank-detail{padding:12px 6px 16px 36px}
+  .row2,.row3{grid-template-columns:1fr}
+  .bracket{grid-template-columns:1fr}
+  .rule{grid-template-columns:1fr;gap:6px}
+  .mini-round{grid-template-columns:1fr;gap:4px}
+  .match{grid-template-columns:1fr auto;row-gap:6px}
+  .match-date{grid-column:1/-1}
+  .stats{grid-template-columns:1fr}
+  .set-line{grid-template-columns:1fr 64px 18px 64px}
+  nav{gap:20px}
+}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+
+<div class="masthead">
+  <div class="badge">Temporada 2026</div>
+  <div class="kicker">O ranking dos</div>
+  <h1 class="big">Tontos</h1>
+  <div class="sub">Campeonato de tênis</div>
+</div>
+
+<div class="navbar">
+  <div class="navbar-in">
+    <nav>
+      <button data-tab="painel" class="active">Painel</button>
+      <button data-tab="rodadas">Rodadas</button>
+      <button data-tab="novo-jogo">Lançar jogo</button>
+      <button data-tab="historico">Histórico</button>
+      <button data-tab="finals">Finals</button>
+      <button data-tab="regras">Regras</button>
+      <button data-tab="premiacao">Premiação</button>
+      <button data-tab="backup">Backup</button>
+    </nav>
+    <div class="sync">
+      <span class="dot" id="syncDot"></span>
+      <span id="syncText">carregando</span>
+      <button class="linkish" id="btnRefresh" onclick="refresh(true)">atualizar</button>
+    </div>
+  </div>
+</div>
+
+<main>
+<div class="warn" id="setupWarn">
+  <strong>Falta configurar o banco.</strong> Abra o <code>index.html</code>, ache o bloco
+  <code>const CONFIG</code> no início do script e preencha a URL e a chave do Supabase.
+  Até lá, os jogos lançados valem só nesta sessão.
+</div>
+
+<section id="painel" class="active">
+  <div class="leader" id="leaderBox"></div>
+
+  <div class="card">
+    <p class="eyebrow">Classificação</p>
+    <h2>Pontos corridos</h2>
+    <p class="hint">Cada set vencido vale um ponto. Desempate por confronto direto, saldo de sets, saldo de games e games ganhos.</p>
+
+    <div class="rank-head" aria-hidden="true">
+      <span>#</span><span>Jogador</span><span>Jogos</span><span>Sets</span><span>Pts</span>
+    </div>
+    <div class="rank" id="rankingList"></div>
+    <p class="cut-note">Toque num jogador para abrir o retrospecto completo. A barra verde à esquerda e a linha tracejada marcam os quatro classificados ao Finals.</p>
+  </div>
+
+</section>
+
+<section id="rodadas">
+  <div class="card">
+    <p class="eyebrow">Sorteio automático</p>
+    <h2>Rodada da semana</h2>
+    <p class="hint">Toda sexta-feira o site sorteia uma rodada nova, com três confrontos e uma folga. O sorteio evita quem já se enfrentou no ciclo e prioriza para a folga quem ainda não descansou. O resultado é gravado na hora, então todo mundo vê a mesma chave.</p>
+    <div id="currentRound" style="margin-top:18px"></div>
+  </div>
+
+  <div class="card">
+    <p class="eyebrow">O que vem por aí</p>
+    <h2>Próximo sorteio</h2>
+    <div id="nextRounds" style="margin-top:14px"></div>
+  </div>
+
+  <div class="card">
+    <p class="eyebrow">Já sorteadas</p>
+    <h2>Rodadas anteriores</h2>
+    <div id="pastRounds" style="margin-top:14px"></div>
+  </div>
+</section>
+
+<section id="novo-jogo">
+  <div class="card">
+    <p class="eyebrow">Resultado</p>
+    <h2>Lançar jogo</h2>
+    <p class="hint">O placar aparece para todos os participantes assim que você salva.</p>
+
+    <div class="row3" style="margin-top:18px">
+      <div class="field"><label>Data</label><input type="date" id="gameDate"></div>
+      <div class="field"><label>Quem está lançando</label><select id="author"></select></div>
+      <div class="field"><label>Tipo</label>
+        <select id="gameType">
+          <option value="normal">Jogo disputado</option>
+          <option value="wo">W.O.</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="row2">
+      <div class="field"><label>Jogador 1</label><select id="p1"></select></div>
+      <div class="field"><label>Jogador 2</label><select id="p2"></select></div>
+    </div>
+
+    <div id="normalFields" style="margin-top:14px">
+      <div class="who"><span>Placar por set</span><span id="whoLabel"></span></div>
+      <div class="set-line">
+        <div class="set-label">1º set</div>
+        <input type="number" min="0" id="s1p1"><div class="set-x">×</div><input type="number" min="0" id="s1p2">
+      </div>
+      <div class="set-line">
+        <div class="set-label">2º set</div>
+        <input type="number" min="0" id="s2p1"><div class="set-x">×</div><input type="number" min="0" id="s2p2">
+      </div>
+      <div class="set-line">
+        <div class="set-label">Tiebreak<small>somente se 1 a 1</small></div>
+        <input type="number" min="0" id="tbp1"><div class="set-x">×</div><input type="number" min="0" id="tbp2">
+      </div>
+      <p class="hint">O match tiebreak vale um set, mas seus pontos não entram no saldo de games.</p>
+    </div>
+
+    <div id="woFields" class="row2" style="display:none;margin-top:14px">
+      <div class="field"><label>Quem recebe o W.O.</label><select id="woWinner"></select></div>
+      <div class="field"><label>Motivo</label><input type="text" id="woNote" placeholder="Ex.: menor disponibilidade de horários"></div>
+    </div>
+
+    <div class="actions">
+      <button class="btn primary" id="btnSave" onclick="saveGame()">Salvar jogo</button>
+      <button class="btn" onclick="clearForm()">Limpar</button>
+      <span class="editing" id="editInfo"></span>
+    </div>
+  </div>
+</section>
+
+<section id="historico">
+  <div class="card">
+    <p class="eyebrow">Todos os confrontos</p>
+    <h2>Histórico</h2>
+    <div class="filters" id="historyFilters"></div>
+    <div id="historyList"></div>
+  </div>
+</section>
+
+<section id="finals">
+  <div class="card">
+    <p class="eyebrow">Novembro de 2026</p>
+    <h2>Finals</h2>
+    <p class="hint">Chave montada com a classificação congelada em 15/11/2026. Enquanto o ranking se mexe, os nomes abaixo também mudam.</p>
+    <div id="finalsBox" style="margin-top:18px"></div>
+  </div>
+</section>
+
+<section id="regras">
+  <div class="card">
+    <p class="eyebrow">O combinado</p>
+    <h2>Regulamento</h2>
+    <dl class="rules" style="margin-top:16px">
+      <div class="rule"><dt>Sistema</dt><dd>Pontos corridos.</dd></div>
+      <div class="rule"><dt>Participantes</dt><dd>ART, AMA, ZÉF, ZÉB, OTA, PED e REY.</dd></div>
+      <div class="rule"><dt>Sorteios</dt><dd>Confrontos sorteados semanalmente, evitando repetição enquanto houver adversários que ainda não se enfrentaram.</dd></div>
+      <div class="rule"><dt>Prazo</dt><dd>15 dias corridos para realizar cada confronto, sem extensão excepcional.</dd></div>
+      <div class="rule"><dt>Encerramento</dt><dd>Ranking congelado em 15/11/2026. Resultados posteriores não entram.</dd></div>
+      <div class="rule"><dt>Formato</dt><dd>Melhor de 3 sets.</dd></div>
+      <div class="rule"><dt>3º set</dt><dd>Em caso de 1 a 1, match tiebreak até 10 pontos, com diferença mínima de 2.</dd></div>
+      <div class="rule"><dt>Pontuação</dt><dd>Cada set vencido vale 1 ponto. Vitória por 2 a 0 dá 2 pontos ao vencedor; por 2 a 1, dá 2 e 1.</dd></div>
+      <div class="rule"><dt>W.O.</dt><dd>Quem recebe soma 1 ponto; quem concede soma 0.</dd></div>
+      <div class="rule"><dt>Responsável pelo W.O.</dt><dd>Se o jogo não ocorrer no prazo, concede W.O. quem menos disponibilizou horários ou menos colaborou.</dd></div>
+      <div class="rule"><dt>Desempate</dt><dd>Confronto direto, depois saldo de sets, depois saldo de games, depois games ganhos.</dd></div>
+      <div class="rule"><dt>Finals</dt><dd>1º contra 4º e 2º contra 3º nas semifinais; perdedores disputam o 3º lugar e vencedores fazem a final.</dd></div>
+    </dl>
+  </div>
+</section>
+
+<section id="premiacao">
+  <div class="card">
+    <p class="eyebrow">O que está em jogo</p>
+    <h2>Premiação</h2>
+    <div class="podium" style="margin-top:16px">
+      <div class="step"><div class="step-pos">1º</div><div><b>Campeão</b><div class="step-what">Vencedor da final</div></div><div class="skewers">5 espetinhos</div></div>
+      <div class="step"><div class="step-pos">2º</div><div><b>Vice-campeão</b><div class="step-what">Perdedor da final</div></div><div class="skewers">3 espetinhos</div></div>
+      <div class="step"><div class="step-pos">3º</div><div><b>Terceiro lugar</b><div class="step-what">Vencedor da disputa de 3º</div></div><div class="skewers">1 espetinho</div></div>
+    </div>
+  </div>
+</section>
+
+<section id="backup">
+  <div class="card">
+    <p class="eyebrow">Segurança dos dados</p>
+    <h2>Backup</h2>
+    <p class="hint">Os jogos ficam numa base compartilhada, então todo mundo alimenta a mesma tabela. Use o backup para guardar uma cópia fora daqui e para trazer o histórico da versão antiga.</p>
+
+    <div class="actions" style="margin-top:16px">
+      <button class="btn" onclick="downloadBackup()">Baixar arquivo</button>
+      <button class="btn" onclick="copyBackup()">Copiar texto</button>
+      <label class="btn" style="cursor:pointer">
+        Abrir arquivo
+        <input type="file" id="backupFile" accept=".json,.txt" style="display:none" onchange="importBackup(event)">
+      </label>
+    </div>
+
+    <div class="field" style="margin-top:20px">
+      <label>Backup em texto</label>
+      <textarea id="backupText" rows="8" style="font-family:ui-monospace,Menlo,Consolas,monospace;font-size:12px"
+        placeholder="Gere o texto do backup ou cole aqui um backup para restaurar."></textarea>
+    </div>
+
+    <div class="actions" style="margin-top:4px">
+      <button class="btn" onclick="generateBackupText()">Gerar texto</button>
+      <button class="btn primary" onclick="mergeFromText()">Somar ao que já existe</button>
+      <button class="btn clay" onclick="restoreFromText()">Substituir tudo</button>
+    </div>
+    <p class="hint">Somar acrescenta os jogos que ainda não estão na base. Substituir apaga a base e coloca o backup no lugar, para todos.</p>
+
+    <div class="actions" style="margin-top:24px;border-top:1px solid var(--hair);padding-top:20px">
+      <button class="btn clay" onclick="resetAll()">Apagar todos os jogos</button>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="crest"><span>Est.</span><div>RT</div><span>2026</span></div>
+  Base compartilhada entre todos os participantes
+</footer>
+<div id="toast"></div>
+
+<script>
+/* =====================================================================
+   CONFIGURAÇÃO — dados do projeto no Supabase
+   ===================================================================== */
+const CONFIG = {
+  SUPABASE_URL: "https://surwxabcepzdvsizhgfm.supabase.co",
+  SUPABASE_ANON_KEY: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InN1cnd4YWJjZXB6ZHZzaXpoZ2ZtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODc5Mjk3MjIsImV4cCI6MjEwMzUwNTcyMn0._3bq9rRDJYGwzSyV3POr6ip4_QgZCDIvqdjwPxoEJmo",
+  TABLE: "jogos"
+};
+/* ===================================================================== */
+
+const PLAYERS = ["ART","AMA","ZÉF","ZÉB","OTA","PED","REY"];
+const DEADLINE = "2026-11-15";
+
+/* Sorteio: primeira sexta-feira do rodízio e prazo de cada confronto. */
+const PRIMEIRA_SEXTA = "2026-08-28";
+const PRAZO_DIAS = 15;
+const POLL_MS = 20000;
+
+const configured = !!(CONFIG.SUPABASE_URL && CONFIG.SUPABASE_ANON_KEY);
+let memoryGames = [];
+let memoryRounds = [];
+let games = [];
+let rounds = [];
+let sorteando = false;
+let busy = false;
+let editingId = null;
+
+/* ---------- dados ---------- */
+
+function endpoint(qs){
+  return CONFIG.SUPABASE_URL.replace(/\/+$/,"") + "/rest/v1/" + CONFIG.TABLE + (qs||"");
+}
+function headers(extra){
+  return Object.assign({
+    "apikey": CONFIG.SUPABASE_ANON_KEY,
+    "Authorization": "Bearer " + CONFIG.SUPABASE_ANON_KEY,
+    "Content-Type": "application/json"
+  }, extra||{});
+}
+async function api(qs, options){
+  const res = await fetch(endpoint(qs), options);
+  if(!res.ok){
+    let detail="";
+    try{ detail=(await res.json()).message||""; }catch(e){}
+    throw new Error(`o servidor respondeu ${res.status}. ${detail}`);
+  }
+  return res;
+}
+async function fetchAll(){
+  if(!configured) return {ok:true, games:memoryGames.slice(), rounds:memoryRounds.slice()};
+  try{
+    const res = await api("?select=id,payload&order=data.desc", {headers:headers()});
+    const rows = await res.json();
+    const gs=[], rs=[];
+    rows.forEach(r=>{
+      const p=r.payload||{};
+      if(p.kind==="rodada") rs.push(Object.assign({id:r.id}, p));
+      else gs.push(Object.assign({id:r.id}, p));
+    });
+    return {ok:true, games:gs, rounds:rs};
+  }catch(e){
+    return {ok:false, error:e.message};
+  }
+}
+function toRow(g){
+  const {id, ...payload} = g;
+  return {id, data:g.date||null, payload, updated_at:new Date().toISOString()};
+}
+async function upsertGames(list){
+  if(!configured){
+    const byId=new Map(memoryGames.map(g=>[g.id,g]));
+    list.forEach(g=>byId.set(g.id,g));
+    memoryGames=Array.from(byId.values());
+    return;
+  }
+  await api("", {
+    method:"POST",
+    headers:headers({"Prefer":"resolution=merge-duplicates,return=minimal"}),
+    body:JSON.stringify(list.map(toRow))
+  });
+}
+async function removeGame(id){
+  if(!configured){ memoryGames=memoryGames.filter(g=>g.id!==id); return; }
+  await api("?id=eq."+encodeURIComponent(id), {method:"DELETE", headers:headers({"Prefer":"return=minimal"})});
+}
+async function removeAll(){
+  if(!configured){ memoryGames=[]; return; }
+  await api("?id=not.is.null", {method:"DELETE", headers:headers({"Prefer":"return=minimal"})});
+}
+
+/* grava a rodada sorteada; se outra pessoa gravou primeiro, o banco recusa
+   pela chave duplicada e o sorteio dela é o que vale */
+async function gravarRodada(indice, r){
+  const linha={
+    id: idRodada(indice),
+    data: isoDate(sextaDoIndice(indice)),
+    payload: {kind:"rodada", indice, confrontos:r.confrontos, folga:r.folga,
+              novoCiclo:!!r.novoCiclo, sorteadoEm:new Date().toISOString()},
+    updated_at: new Date().toISOString()
+  };
+  if(!configured){
+    if(!memoryRounds.some(x=>x.indice===indice)) memoryRounds.push(Object.assign({id:linha.id}, linha.payload));
+    return;
+  }
+  await api("", {method:"POST", headers:headers({"Prefer":"return=minimal"}), body:JSON.stringify([linha])});
+}
+async function apagarRodada(indice){
+  if(!configured){ memoryRounds=memoryRounds.filter(x=>x.indice!==indice); return; }
+  await api("?id=eq."+encodeURIComponent(idRodada(indice)), {method:"DELETE", headers:headers({"Prefer":"return=minimal"})});
+}
+
+/* ---------- sincronização ---------- */
+
+function hhmm(){
+  const d=new Date();
+  return String(d.getHours()).padStart(2,"0")+":"+String(d.getMinutes()).padStart(2,"0");
+}
+function setStatus(text,kind){
+  document.getElementById("syncText").textContent=text;
+  document.getElementById("syncDot").className="dot"+(kind?" "+kind:"");
+}
+function setBusy(v){
+  busy=v;
+  document.getElementById("btnSave").disabled=v;
+  document.getElementById("btnRefresh").disabled=v;
+}
+let toastTimer=null;
+function toast(msg,bad){
+  const el=document.getElementById("toast");
+  el.textContent=msg;
+  el.className="show"+(bad?" bad":"");
+  clearTimeout(toastTimer);
+  toastTimer=setTimeout(()=>{el.className=bad?"bad":"";},3200);
+}
+
+async function refresh(manual){
+  if(busy) return false;
+  setBusy(true);
+  setStatus("sincronizando","busy");
+  const r = await fetchAll();
+  setBusy(false);
+  if(!r.ok){
+    setStatus("sem conexão","warn");
+    if(manual) toast("Não consegui ler a base: "+r.error, true);
+    return false;
+  }
+  games = r.games;
+  rounds = r.rounds;
+  renderAll();
+  garantirRodada();
+  setStatus(configured?("atualizado "+hhmm()):("sem gravação "+hhmm()));
+  return true;
+}
+async function run(action, okMsg){
+  if(busy){ toast("Aguarde a operação anterior terminar.", true); return false; }
+  setBusy(true);
+  setStatus("salvando","busy");
+  try{
+    await action();
+    setBusy(false);
+    await refresh();
+    if(okMsg) toast(okMsg);
+    return true;
+  }catch(e){
+    setBusy(false);
+    setStatus("falha ao salvar","warn");
+    toast("Nada foi salvo: "+(e && e.message ? e.message : e), true);
+    return false;
+  }
+}
+
+/* ---------- cálculo ---------- */
+
+function calcNormalGame(g){
+  const sets={p1:0,p2:0};
+  const gameTotals={p1:0,p2:0};
+  [[g.s1p1,g.s1p2],[g.s2p1,g.s2p2]].forEach(([a,b])=>{
+    if(a>b) sets.p1++;
+    else if(b>a) sets.p2++;
+    gameTotals.p1 += a||0;
+    gameTotals.p2 += b||0;
+  });
+  if(g.tbp1!==null && g.tbp1!==undefined && g.tbp2!==null && g.tbp2!==undefined){
+    if(g.tbp1>g.tbp2) sets.p1++;
+    else if(g.tbp2>g.tbp1) sets.p2++;
+  }
+  return {sets,gameTotals};
+}
+function getGameSummary(g){
+  if(g.type==="wo"){
+    const loser = g.woWinner===g.p1 ? g.p2 : g.p1;
+    return {
+      points:{[g.woWinner]:1,[loser]:0},
+      setsWon:{[g.woWinner]:1,[loser]:0},
+      setsLost:{[g.woWinner]:0,[loser]:1},
+      gameBalance:{[g.woWinner]:0,[loser]:0},
+      gamesWon:{[g.woWinner]:0,[loser]:0},
+      result:"W.O."
+    };
+  }
+  const c=calcNormalGame(g);
+  return {
+    points:{[g.p1]:c.sets.p1,[g.p2]:c.sets.p2},
+    setsWon:{[g.p1]:c.sets.p1,[g.p2]:c.sets.p2},
+    setsLost:{[g.p1]:c.sets.p2,[g.p2]:c.sets.p1},
+    gameBalance:{[g.p1]:c.gameTotals.p1-c.gameTotals.p2,[g.p2]:c.gameTotals.p2-c.gameTotals.p1},
+    gamesWon:{[g.p1]:c.gameTotals.p1,[g.p2]:c.gameTotals.p2},
+    result:c.sets.p1+" a "+c.sets.p2
+  };
+}
+function getRanking(){
+  const stats={};
+  PLAYERS.forEach(p=>stats[p]={player:p,games:0,points:0,setsLost:0,setBalance:0,gameBalance:0,gamesWon:0});
+  games.forEach(g=>{
+    const s=getGameSummary(g);
+    for(const p of [g.p1,g.p2]){
+      if(!stats[p]) continue;
+      stats[p].games++;
+      stats[p].points += s.points[p]||0;
+      stats[p].setsLost += s.setsLost[p]||0;
+      stats[p].setBalance += (s.setsWon[p]||0)-(s.setsLost[p]||0);
+      stats[p].gameBalance += s.gameBalance[p]||0;
+      stats[p].gamesWon += s.gamesWon[p]||0;
+    }
+  });
+  function h2h(a,b){
+    const duels=games.filter(g=>[g.p1,g.p2].includes(a.player)&&[g.p1,g.p2].includes(b.player));
+    let pa=0,pb=0;
+    duels.forEach(g=>{
+      const s=getGameSummary(g);
+      pa+=s.points[a.player]||0; pb+=s.points[b.player]||0;
+    });
+    return pb-pa;
+  }
+  return Object.values(stats).sort((a,b)=>{
+    if(b.points!==a.points) return b.points-a.points;
+    const hh=h2h(a,b); if(hh!==0) return hh;
+    if(b.setBalance!==a.setBalance) return b.setBalance-a.setBalance;
+    if(b.gameBalance!==a.gameBalance) return b.gameBalance-a.gameBalance;
+    if(b.gamesWon!==a.gamesWon) return b.gamesWon-a.gamesWon;
+    return a.player.localeCompare(b.player);
+  });
+}
+
+/* ---------- render ---------- */
+
+function esc(s){
+  return String(s==null?"":s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+}
+function fmtDate(s){
+  if(!s) return "";
+  const [y,m,d]=String(s).split("-");
+  return `${d}/${m}`;
+}
+function fmtYear(s){
+  if(!s) return "";
+  return String(s).split("-")[0];
+}
+function sign(n){ return (n>0?"+":"")+n; }
+
+function renderLeader(){
+  const r=getRanking();
+  const box=document.getElementById("leaderBox");
+  if(!games.length){
+    box.innerHTML=`<div class="leader-in"><div>
+      <p class="eyebrow">Temporada aberta</p>
+      <div class="leader-name">Sem jogos</div></div></div>
+      <div class="chasers"><span>Lance o primeiro resultado na aba Lançar jogo.</span></div>`;
+    return;
+  }
+  const [a,b,c]=r;
+  box.innerHTML=`
+    <div class="leader-in">
+      <div>
+        <p class="eyebrow">Na frente</p>
+        <div class="leader-name">${esc(a.player)}</div>
+      </div>
+      <div class="leader-pts"><b>${a.points}</b><small>pontos</small></div>
+    </div>
+    <div class="chasers">
+      ${b?`<span>2º <b>${esc(b.player)}</b> ${b.points}</span>`:""}
+      ${c?`<span>3º <b>${esc(c.player)}</b> ${c.points}</span>`:""}
+      <span>${a.games} jogo${a.games===1?"":"s"} disputado${a.games===1?"":"s"}</span>
+    </div>`;
+}
+
+let abertos=new Set();
+function alternarJogador(p){
+  if(abertos.has(p)) abertos.delete(p); else abertos.add(p);
+  renderRanking();
+}
+function retrospecto(jogador){
+  const linhas=games
+    .filter(g=>g.p1===jogador||g.p2===jogador)
+    .sort((x,y)=>String(y.date).localeCompare(String(x.date)))
+    .map(g=>{
+      const rival = g.p1===jogador ? g.p2 : g.p1;
+      const s=getGameSummary(g);
+      const meu=s.points[jogador]||0, dele=s.points[rival]||0;
+      const verbo = g.type==="wo"
+        ? (g.woWinner===jogador ? "recebeu W.O. de" : "concedeu W.O. para")
+        : (meu>dele ? "venceu" : "perdeu para");
+      const placar = g.type==="wo" ? "" : ` <b>${meu} a ${dele}</b>`;
+      return `<div>${fmtDate(g.date)} • ${verbo} ${esc(rival)}${placar}</div>`;
+    });
+  return linhas.length ? linhas.join("") : `<div>Nenhum jogo lançado ainda.</div>`;
+}
+
+function renderRanking(){
+  const r=getRanking();
+  const teto=Math.max(1, ...r.map(x=>x.points));
+  document.getElementById("rankingList").innerHTML=r.map((x,i)=>`
+    <div class="rank-row ${i<4?"top4":""} ${i===3?"cut":""} ${abertos.has(x.player)?"open":""}"
+         role="button" tabindex="0" onclick="alternarJogador('${esc(x.player)}')">
+      <div class="rank-pos">${i+1}</div>
+      <div>
+        <div class="rank-name">${esc(x.player)}</div>
+        <div class="rank-bar"><i style="width:${Math.round(x.points/teto*100)}%"></i></div>
+      </div>
+      <div class="rank-num">${x.games}</div>
+      <div class="rank-num">${sign(x.setBalance)}</div>
+      <div class="rank-pts">${x.points}</div>
+    </div>
+    <div class="rank-detail">
+      <div>Saldo de games <b>${sign(x.gameBalance)}</b> • games ganhos <b>${x.gamesWon}</b> • sets perdidos <b>${x.setsLost}</b></div>
+      ${retrospecto(x.player)}
+    </div>`).join("");
+
+}
+
+let filtro="";
+function filtrarHistorico(p){ filtro=p; renderHistory(); }
+function renderHistory(){
+  document.getElementById("historyFilters").innerHTML=
+    [{v:"",t:"Todos"}].concat(PLAYERS.map(p=>({v:p,t:p})))
+      .map(o=>`<button class="${filtro===o.v?"on":""}" onclick="filtrarHistorico('${o.v}')">${o.t}</button>`).join("");
+
+  const rows=[...games]
+    .filter(g=>!filtro || g.p1===filtro || g.p2===filtro)
+    .sort((a,b)=>String(b.date).localeCompare(String(a.date)));
+  const box=document.getElementById("historyList");
+  if(!rows.length){
+    box.innerHTML=`<p class="empty">${filtro?"Nenhum jogo de "+esc(filtro)+" até agora.":"Nenhum jogo lançado até agora."}</p>`;
+    return;
+  }
+  box.innerHTML=rows.map(g=>{
+    const s=getGameSummary(g);
+    const wo=g.type==="wo";
+    const score = wo ? "W.O." : `${s.points[g.p1]||0} a ${s.points[g.p2]||0}`;
+    const meta = wo
+      ? `ponto para ${esc(g.woWinner)}${g.note?" • "+esc(g.note):""}`
+      : [placarSets(g), g.author?"lançado por "+esc(g.author):""].filter(Boolean).join(" • ");
+    return `<div class="match">
+      <div class="match-date">${fmtDate(g.date)}/${fmtYear(g.date).slice(2)}</div>
+      <div>
+        <div class="match-players">${esc(g.p1)}<span>x</span>${esc(g.p2)}</div>
+        <div class="match-meta ${wo?"wo":""}">${meta}</div>
+      </div>
+      <div class="match-right">
+        <div class="match-score">${score}</div>
+        <div class="match-acts">
+          <button class="btn mini" onclick="editGame('${esc(g.id)}')">Editar</button>
+          <button class="btn mini clay" onclick="deleteGame('${esc(g.id)}')">Excluir</button>
+        </div>
+      </div>
+    </div>`;
+  }).join("");
+}
+function placarSets(g){
+  const parts=[`${g.s1p1}/${g.s1p2}`,`${g.s2p1}/${g.s2p2}`];
+  if(g.tbp1!==null && g.tbp1!==undefined && g.tbp2!==null && g.tbp2!==undefined) parts.push(`${g.tbp1}/${g.tbp2}`);
+  return parts.join("  ");
+}
+
+function renderFinals(){
+  const r=getRanking();
+  const box=document.getElementById("finalsBox");
+  const jogou = games.length>0;
+  const nome = i => jogou ? `${esc(r[i].player)}` : "a definir";
+  box.innerHTML=`
+    <div class="bracket">
+      <div class="tie"><span>Semifinal 1</span><b>${nome(0)} <span style="color:var(--muted)">contra</span> ${nome(3)}</b></div>
+      <div class="tie"><span>Semifinal 2</span><b>${nome(1)} <span style="color:var(--muted)">contra</span> ${nome(2)}</b></div>
+      <div class="tie decider"><span>Disputa de 3º</span><b>Perdedor da SF1 contra perdedor da SF2</b></div>
+      <div class="tie"><span>Final</span><b>Vencedor da SF1 contra vencedor da SF2</b></div>
+    </div>`;
+}
+
+/* ---------- rodadas e sorteio ---------- */
+
+/* Rodadas que aconteceram antes do site existir. Ficam fixas no código;
+   as próximas são sorteadas na sexta e gravadas na base. */
+const RODADAS_INICIAIS = [
+  {indice:0, confrontos:[["ZÉB","OTA"],["ART","ZÉF"],["REY","PED"]], folga:"AMA", novoCiclo:true},
+  {indice:1, confrontos:[["AMA","ART"],["PED","ZÉB"],["OTA","REY"]], folga:"ZÉF"}
+];
+
+function parseDate(s){ const [y,m,d]=String(s).split("-").map(Number); return new Date(y,m-1,d); }
+function addDays(dt,n){ const d=new Date(dt); d.setDate(d.getDate()+n); return d; }
+function isoDate(dt){
+  return dt.getFullYear()+"-"+String(dt.getMonth()+1).padStart(2,"0")+"-"+String(dt.getDate()).padStart(2,"0");
+}
+function hoje0(){ const d=new Date(); d.setHours(0,0,0,0); return d; }
+function diasEntre(a,b){ return Math.round((b-a)/86400000); }
+function sextaDoIndice(i){ return addDays(parseDate(PRIMEIRA_SEXTA), i*7); }
+function idRodada(i){ return "rodada-"+isoDate(sextaDoIndice(i)); }
+function indiceAtual(){
+  const d=diasEntre(parseDate(PRIMEIRA_SEXTA), hoje0());
+  return d<0 ? -1 : Math.floor(d/7);
+}
+function fmtDia(dt){
+  const semana=["domingo","segunda","terça","quarta","quinta","sexta","sábado"][dt.getDay()];
+  return semana+" "+String(dt.getDate()).padStart(2,"0")+"/"+String(dt.getMonth()+1).padStart(2,"0");
+}
+function chavePar(a,b){ return [a,b].sort().join("|"); }
+function embaralhar(arr){
+  const a=arr.slice();
+  for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; }
+  return a;
+}
+
+function todasRodadas(){
+  const mapa=new Map();
+  RODADAS_INICIAIS.forEach(r=>mapa.set(r.indice, r));
+  rounds.forEach(r=>{ if(typeof r.indice==="number") mapa.set(r.indice, r); });
+  return Array.from(mapa.values()).sort((a,b)=>a.indice-b.indice);
+}
+function infoRodada(r){
+  const data=sextaDoIndice(r.indice);
+  return Object.assign({}, r, {
+    numero:r.indice+1,
+    data,
+    prazo: r.prazo ? parseDate(r.prazo) : addDays(data, PRAZO_DIAS)
+  });
+}
+function rodadaPorIndice(i){
+  const r=todasRodadas().find(x=>x.indice===i);
+  return r ? infoRodada(r) : null;
+}
+
+/* estado do ciclo: quais duplas já se enfrentaram e quantas folgas cada um teve */
+function estadoCiclo(){
+  let usados=new Set(), folgas={};
+  PLAYERS.forEach(p=>folgas[p]=0);
+  todasRodadas().forEach(r=>{
+    if(r.novoCiclo && r.indice!==0){ usados=new Set(); PLAYERS.forEach(p=>folgas[p]=0); }
+    (r.confrontos||[]).forEach(([a,b])=>usados.add(chavePar(a,b)));
+    if(r.folga) folgas[r.folga]=(folgas[r.folga]||0)+1;
+  });
+  return {usados,folgas};
+}
+function emparelhar(lista, usados){
+  if(!lista.length) return [];
+  const a=lista[0];
+  for(const b of embaralhar(lista.slice(1))){
+    if(usados.has(chavePar(a,b))) continue;
+    const resto=emparelhar(lista.filter(x=>x!==a&&x!==b), usados);
+    if(resto) return [[a,b]].concat(resto);
+  }
+  return null;
+}
+function tentarSorteio(usados, folgas){
+  const minimo=Math.min.apply(null, PLAYERS.map(p=>folgas[p]||0));
+  for(const folga of embaralhar(PLAYERS.filter(p=>(folgas[p]||0)===minimo))){
+    const confrontos=emparelhar(embaralhar(PLAYERS.filter(p=>p!==folga)), usados);
+    if(confrontos) return {confrontos, folga};
+  }
+  return null;
+}
+function sortearRodada(){
+  const st=estadoCiclo();
+  let r=tentarSorteio(st.usados, st.folgas);
+  if(r) return r;
+  const zeradas={}; PLAYERS.forEach(p=>zeradas[p]=0);
+  r=tentarSorteio(new Set(), zeradas);
+  if(r) r.novoCiclo=true;
+  return r;
+}
+
+const tentadas=new Set();
+async function garantirRodada(){
+  const i=indiceAtual();
+  if(i<0 || sorteando || tentadas.has(i)) return;
+  if(sextaDoIndice(i) > parseDate(DEADLINE)) return;
+  if(rodadaPorIndice(i)) return;
+  const r=sortearRodada();
+  if(!r) return;
+  tentadas.add(i);
+  sorteando=true;
+  setStatus("sorteando a rodada","busy");
+  try{
+    await gravarRodada(i, r);
+    toast("Rodada "+(i+1)+" sorteada.");
+  }catch(e){ /* alguém sorteou primeiro; o sorteio dessa pessoa é o que vale */ }
+  sorteando=false;
+  const dados=await fetchAll();
+  if(dados.ok){ games=dados.games; rounds=dados.rounds; renderAll(); }
+  setStatus(configured?("atualizado "+hhmm()):("sem gravação "+hhmm()));
+}
+
+async function refazerSorteio(i){
+  if(!confirm("Refazer o sorteio da rodada "+(i+1)+"? Os confrontos mudam para todos os participantes.")) return;
+  tentadas.delete(i);
+  await run(async()=>{
+    await apagarRodada(i);
+    const dados=await fetchAll();
+    if(dados.ok){ rounds=dados.rounds; games=dados.games; }
+    const r=sortearRodada();
+    if(!r) throw new Error("não foi possível montar a rodada.");
+    await gravarRodada(i, r);
+    tentadas.add(i);
+  }, "Rodada sorteada de novo.");
+}
+
+/* ---------- status de cada confronto ---------- */
+
+function jogoDoConfronto(par, rodada){
+  const [a,b]=par;
+  return games.find(g=>{
+    if(!( (g.p1===a&&g.p2===b) || (g.p1===b&&g.p2===a) )) return false;
+    if(!g.date) return false;
+    const d=parseDate(g.date);
+    return d>=rodada.data && d<=addDays(rodada.prazo,10);
+  });
+}
+function statusConfronto(par, rodada){
+  const g=jogoDoConfronto(par, rodada);
+  if(g){
+    if(g.type==="wo") return {classe:"done", texto:"W.O. "+g.woWinner};
+    const s=getGameSummary(g);
+    return {classe:"done", texto:(s.points[par[0]]||0)+" a "+(s.points[par[1]]||0)};
+  }
+  const restam=diasEntre(hoje0(), rodada.prazo);
+  if(restam<0) return {classe:"late", texto:"prazo vencido"};
+  if(restam===0) return {classe:"late", texto:"vence hoje"};
+  return {classe:"", texto:restam+" dia"+(restam===1?"":"s")};
+}
+function htmlConfrontos(rodada){
+  return rodada.confrontos.map(par=>{
+    const st=statusConfronto(par, rodada);
+    return `<div class="fixture">
+      <div class="fixture-players">${esc(par[0])}<span>contra</span>${esc(par[1])}</div>
+      <div class="chip ${st.classe}">${esc(st.texto)}</div>
+    </div>`;
+  }).join("");
+}
+
+/* ---------- render ---------- */
+
+function renderRodadas(){
+  const i=indiceAtual();
+  const box=document.getElementById("currentRound");
+  const week=null;
+  const proxBox=document.getElementById("nextRounds");
+  const encerrado = i<0 ? false : sextaDoIndice(i) > parseDate(DEADLINE);
+
+  if(encerrado){
+    const txt=`<p class="hint">O rodízio terminou em 15/11/2026. Daqui em diante vale o Finals.</p>`;
+    box.innerHTML=txt;
+    proxBox.innerHTML=`<p class="empty">Não há mais sorteios nesta temporada.</p>`;
+  }else{
+    const r=i>=0 ? rodadaPorIndice(i) : null;
+    if(!r){
+      const txt=sorteando
+        ? `<p class="hint">Sorteando a rodada desta semana…</p>`
+        : `<p class="hint">A rodada desta semana ainda não foi sorteada. Ela aparece assim que alguém abrir o site na sexta.</p>`;
+      box.innerHTML=txt;
+    }else{
+      const cab=`<div class="round-head">
+          <div class="round-no">Rodada ${r.numero}</div>
+          <div class="round-when">sorteada em <b>${fmtDia(r.data)}</b> • jogar até <b>${fmtDia(r.prazo)}</b></div>
+        </div>`;
+      const corpo=htmlConfrontos(r)+`<div class="bye">Folga nesta rodada: <b>${esc(r.folga)}</b></div>`;
+      box.innerHTML=cab+corpo+
+        `<div class="actions"><button class="btn mini" onclick="refazerSorteio(${r.indice})">Refazer o sorteio</button></div>`;
+    }
+    const prox=sextaDoIndice(Math.max(i,0)+1);
+    proxBox.innerHTML = prox<=parseDate(DEADLINE)
+      ? `<p class="hint">O próximo sorteio acontece na <b>${fmtDia(prox)}</b>. Os confrontos só aparecem no dia, sorteados entre quem ainda não se enfrentou neste ciclo.</p>`
+      : `<p class="empty">Esta é a última rodada antes do congelamento do ranking.</p>`;
+  }
+
+  const anteriores=todasRodadas().filter(x=>x.indice < i).map(infoRodada).sort((a,b)=>b.indice-a.indice);
+  document.getElementById("pastRounds").innerHTML = anteriores.length
+    ? anteriores.map(x=>{
+        const feitos=x.confrontos.filter(p=>jogoDoConfronto(p,x)).length;
+        return `<div class="mini-round">
+          <div class="mini-when">${fmtDia(x.data)}</div>
+          <div class="mini-list">${x.confrontos.map(p=>{
+              const g=jogoDoConfronto(p,x);
+              return esc(p[0])+" x "+esc(p[1])+(g?"":" <em>(não jogado)</em>");
+            }).join(" • ")} <em>• folga ${esc(x.folga)} • ${feitos} de ${x.confrontos.length} realizados</em></div>
+        </div>`;
+      }).join("")
+    : `<p class="empty">Nenhuma rodada anterior.</p>`;
+}
+
+function renderAll(){ renderLeader(); renderRanking(); renderHistory(); renderFinals(); renderRodadas(); }
+
+/* ---------- formulário ---------- */
+
+function syncWo(){
+  const p1=document.getElementById("p1").value;
+  const p2=document.getElementById("p2").value;
+  const cur=document.getElementById("woWinner").value;
+  document.getElementById("woWinner").innerHTML=[p1,p2].map(p=>`<option value="${p}">${p}</option>`).join("");
+  if([p1,p2].includes(cur)) document.getElementById("woWinner").value=cur;
+  document.getElementById("whoLabel").innerHTML=`<b>${esc(p1)}</b> &nbsp;×&nbsp; <b>${esc(p2)}</b>`;
+}
+function toggleType(){
+  const wo=document.getElementById("gameType").value==="wo";
+  document.getElementById("normalFields").style.display=wo?"none":"block";
+  document.getElementById("woFields").style.display=wo?"grid":"none";
+}
+function numOrNull(id){
+  const v=document.getElementById(id).value;
+  return v==="" ? null : Number(v);
+}
+
+async function saveGame(){
+  const type=document.getElementById("gameType").value;
+  const p1=document.getElementById("p1").value;
+  const p2=document.getElementById("p2").value;
+  if(p1===p2){ toast("Escolha jogadores diferentes.", true); return; }
+
+  const g={
+    id: editingId || (Date.now().toString(36)+Math.random().toString(36).slice(2)),
+    date: document.getElementById("gameDate").value,
+    author: document.getElementById("author").value,
+    type,p1,p2
+  };
+
+  if(type==="wo"){
+    g.woWinner=document.getElementById("woWinner").value;
+    g.note=document.getElementById("woNote").value.trim();
+  }else{
+    g.s1p1=numOrNull("s1p1"); g.s1p2=numOrNull("s1p2");
+    g.s2p1=numOrNull("s2p1"); g.s2p2=numOrNull("s2p2");
+    g.tbp1=numOrNull("tbp1"); g.tbp2=numOrNull("tbp2");
+    if([g.s1p1,g.s1p2,g.s2p1,g.s2p2].some(v=>v===null)){
+      toast("Preencha os games dos dois primeiros sets.", true); return;
+    }
+    const c=calcNormalGame(g);
+    if(c.sets.p1===1 && c.sets.p2===1 && (g.tbp1===null || g.tbp2===null)){
+      toast("O jogo está 1 a 1. Preencha o match tiebreak.", true); return;
+    }
+    if(c.sets.p1<2 && c.sets.p2<2){
+      toast("O jogo precisa terminar com 2 sets para um dos jogadores.", true); return;
+    }
+  }
+
+  const wasEditing=!!editingId;
+  const ok = await run(()=>upsertGames([g]),
+    wasEditing?"Jogo atualizado.":"Jogo salvo e visível para todo mundo.");
+  if(ok) clearForm();
+}
+
+function clearForm(){
+  editingId=null;
+  document.getElementById("editInfo").textContent="";
+  ["s1p1","s1p2","s2p1","s2p2","tbp1","tbp2","woNote"].forEach(id=>document.getElementById(id).value="");
+  document.getElementById("gameType").value="normal";
+  toggleType();
+}
+
+function editGame(id){
+  const g=games.find(x=>x.id===id); if(!g)return;
+  editingId=id;
+  document.getElementById("gameDate").value=g.date||"";
+  document.getElementById("gameType").value=g.type;
+  document.getElementById("p1").value=g.p1;
+  document.getElementById("p2").value=g.p2;
+  if(g.author) document.getElementById("author").value=g.author;
+  syncWo(); toggleType();
+  if(g.type==="wo"){
+    document.getElementById("woWinner").value=g.woWinner;
+    document.getElementById("woNote").value=g.note||"";
+  }else{
+    for(const f of ["s1p1","s1p2","s2p1","s2p2","tbp1","tbp2"]){
+      const v=g[f];
+      document.getElementById(f).value=(v===null||v===undefined)?"":v;
+    }
+  }
+  document.getElementById("editInfo").textContent="editando um jogo já lançado";
+  showTab("novo-jogo");
+  window.scrollTo({top:0});
+}
+
+function deleteGame(id){
+  const g=games.find(x=>x.id===id);
+  if(!g) return;
+  if(!confirm(`Excluir ${g.p1} contra ${g.p2} de ${fmtDate(g.date)}? Isso apaga para todos.`))return;
+  run(()=>removeGame(id), "Jogo excluído.");
+}
+
+/* ---------- backup ---------- */
+
+function backupJson(){ return JSON.stringify({v:1,games:games},null,2); }
+function generateBackupText(){ document.getElementById("backupText").value = backupJson(); }
+async function copyBackup(){
+  const text=backupJson();
+  const area=document.getElementById("backupText");
+  area.value=text;
+  try{
+    await navigator.clipboard.writeText(text);
+    toast("Backup copiado.");
+  }catch(e){
+    area.focus(); area.select();
+    try{ document.execCommand("copy"); toast("Backup copiado."); }
+    catch(err){ toast("O navegador bloqueou a cópia. O texto ficou selecionado.", true); }
+  }
+}
+function downloadBackup(){
+  const text=backupJson();
+  try{
+    const blob=new Blob([text],{type:"application/json;charset=utf-8"});
+    const url=URL.createObjectURL(blob);
+    const a=document.createElement("a");
+    a.href=url; a.download="ranking_dos_tontos_2026_backup.json";
+    a.style.display="none";
+    document.body.appendChild(a); a.click();
+    setTimeout(()=>{URL.revokeObjectURL(url);a.remove();},1000);
+    return;
+  }catch(e){}
+  try{
+    const a=document.createElement("a");
+    a.href="data:application/json;charset=utf-8,"+encodeURIComponent(text);
+    a.download="ranking_dos_tontos_2026_backup.json";
+    document.body.appendChild(a); a.click(); a.remove();
+  }catch(e){
+    document.getElementById("backupText").value=text;
+    toast("O navegador bloqueou o download. Use copiar texto.", true);
+  }
+}
+function parseBackup(text){
+  const data=JSON.parse(text);
+  const list=Array.isArray(data)?data:data.games;
+  if(!Array.isArray(list)) throw new Error("formato inválido");
+  return list.map(g=>Object.assign({},g,{
+    id: g.id || (Date.now().toString(36)+Math.random().toString(36).slice(2))
+  }));
+}
+function mergeFromText(){
+  const text=document.getElementById("backupText").value.trim();
+  if(!text){ toast("Cole um backup no campo de texto.", true); return; }
+  let incoming;
+  try{ incoming=parseBackup(text); }catch(e){ toast("Esse texto não é um backup válido.", true); return; }
+  if(!incoming.length){ toast("O backup não tem jogos.", true); return; }
+  if(!confirm(`Enviar ${incoming.length} jogo(s) para a base? Jogos com o mesmo identificador são atualizados, não duplicados.`)) return;
+  run(()=>upsertGames(incoming), "Backup somado à base.");
+}
+function restoreFromText(){
+  const text=document.getElementById("backupText").value.trim();
+  if(!text){ toast("Cole um backup no campo de texto.", true); return; }
+  let incoming;
+  try{ incoming=parseBackup(text); }catch(e){ toast("Esse texto não é um backup válido.", true); return; }
+  if(!confirm("Isso apaga a base e coloca o backup no lugar, para todos os participantes. Continuar?")) return;
+  run(async()=>{ await removeAll(); if(incoming.length) await upsertGames(incoming); }, "Base substituída pelo backup.");
+}
+function importBackup(ev){
+  const file=ev.target.files[0]; if(!file)return;
+  const reader=new FileReader();
+  reader.onload=()=>{
+    document.getElementById("backupText").value=String(reader.result);
+    showTab("backup");
+    toast("Arquivo carregado. Escolha somar ou substituir.");
+  };
+  reader.readAsText(file);
+  ev.target.value="";
+}
+function resetAll(){
+  if(!confirm("Isso apaga todos os jogos da base, para todos os participantes. Continuar?")) return;
+  if(!confirm("Confirma mesmo? Não dá para desfazer.")) return;
+  run(()=>removeAll(), "Base zerada.");
+}
+
+/* ---------- início ---------- */
+
+function showTab(tab){
+  document.querySelectorAll("nav button").forEach(b=>b.classList.toggle("active", b.dataset.tab===tab));
+  document.querySelectorAll("main section").forEach(s=>s.classList.toggle("active", s.id===tab));
+}
+
+async function init(){
+  for(const id of ["p1","p2","woWinner","author"]){
+    document.getElementById(id).innerHTML=PLAYERS.map(p=>`<option value="${p}">${p}</option>`).join("");
+  }
+  document.getElementById("p2").selectedIndex=1;
+
+  document.querySelectorAll("nav button").forEach(b=>{
+    b.addEventListener("click",()=>showTab(b.dataset.tab));
+  });
+  document.getElementById("gameType").addEventListener("change",toggleType);
+  document.getElementById("p1").addEventListener("change",syncWo);
+  document.getElementById("p2").addEventListener("change",syncWo);
+  document.getElementById("gameDate").value=new Date().toISOString().slice(0,10);
+
+  if(!configured) document.getElementById("setupWarn").style.display="block";
+
+  syncWo(); toggleType(); renderAll();
+  await refresh();
+
+  setInterval(()=>{ if(!busy && document.visibilityState==="visible") refresh(); }, POLL_MS);
+  document.addEventListener("visibilitychange",()=>{ if(document.visibilityState==="visible" && !busy) refresh(); });
+}
+
+init();
+</script>
+</body>
+</html>
