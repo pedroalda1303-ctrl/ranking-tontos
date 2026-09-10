@@ -219,6 +219,42 @@ input:focus,select:focus,textarea:focus{outline:2px solid var(--ball);outline-of
 .skewers{font-family:var(--display);font-size:15px;letter-spacing:.1em;
   text-transform:uppercase;color:var(--line)}
 
+/* ---------- rodadas ---------- */
+.round-head{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;margin-bottom:14px}
+.round-no{font-family:var(--display);font-size:30px;line-height:1;text-transform:uppercase}
+.round-when{font-size:13px;color:var(--muted)}
+.round-when b{color:var(--line);font-weight:600}
+.fixture{
+  display:grid;grid-template-columns:1fr auto;gap:14px;align-items:center;
+  padding:14px 0;border-bottom:1px solid rgba(238,243,236,.07)
+}
+.fixture:last-child{border-bottom:0}
+.fixture-players{font-family:var(--display);font-size:22px;letter-spacing:.04em;text-transform:uppercase}
+.fixture-players span{color:var(--muted);font-size:14px;margin:0 8px}
+.chip{
+  font-family:var(--display);font-size:12px;letter-spacing:.12em;text-transform:uppercase;
+  border:1px solid var(--hair);border-radius:999px;padding:5px 12px;color:var(--muted);white-space:nowrap
+}
+.chip.done{border-color:var(--ok);color:var(--ok)}
+.chip.late{border-color:var(--clay);color:var(--clay)}
+.bye{
+  margin-top:14px;font-size:13px;color:var(--muted);
+  border-top:1px dashed var(--hair);padding-top:12px
+}
+.bye b{color:var(--line);font-weight:600}
+.mini-round{
+  display:grid;grid-template-columns:96px 1fr;gap:14px;align-items:baseline;
+  padding:12px 0;border-bottom:1px solid rgba(238,243,236,.07)
+}
+.mini-round:last-child{border-bottom:0}
+.mini-when{font-family:var(--display);font-size:15px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.mini-list{font-size:14px}
+.mini-list em{font-style:normal;color:var(--muted)}
+@media(max-width:760px){
+  .mini-round{grid-template-columns:1fr;gap:4px}
+  .fixture-players{font-size:19px}
+}
+
 /* ---------- avisos e toast ---------- */
 .warn{
   display:none;border:1px solid var(--clay);border-left-width:4px;border-radius:12px;
@@ -266,6 +302,7 @@ footer{max-width:1040px;margin:0 auto;padding:0 18px 40px;color:var(--muted);fon
   </div>
   <nav>
     <button data-tab="painel" class="active">Painel</button>
+    <button data-tab="rodadas">Rodadas</button>
     <button data-tab="novo-jogo">Lançar jogo</button>
     <button data-tab="historico">Histórico</button>
     <button data-tab="finals">Finals</button>
@@ -284,6 +321,8 @@ footer{max-width:1040px;margin:0 auto;padding:0 18px 40px;color:var(--muted);fon
 
 <section id="painel" class="active">
   <div class="leader" id="leaderBox"></div>
+
+  <div class="card" id="weekCard"></div>
 
   <div class="card">
     <p class="eyebrow">Classificação</p>
@@ -308,6 +347,27 @@ footer{max-width:1040px;margin:0 auto;padding:0 18px 40px;color:var(--muted);fon
       <div class="stat"><b id="statWO">0</b><span>W.O. no período</span></div>
       <div class="stat"><b id="statDias">—</b><span>Dias até o corte</span></div>
     </div>
+  </div>
+</section>
+
+<section id="rodadas">
+  <div class="card">
+    <p class="eyebrow">Sorteio automático</p>
+    <h2>Rodada da semana</h2>
+    <p class="hint">Toda sexta-feira o site sorteia uma rodada nova, com três confrontos e uma folga. O sorteio evita quem já se enfrentou no ciclo e prioriza para a folga quem ainda não descansou. O resultado é gravado na hora, então todo mundo vê a mesma chave.</p>
+    <div id="currentRound" style="margin-top:18px"></div>
+  </div>
+
+  <div class="card">
+    <p class="eyebrow">O que vem por aí</p>
+    <h2>Próximo sorteio</h2>
+    <div id="nextRounds" style="margin-top:14px"></div>
+  </div>
+
+  <div class="card">
+    <p class="eyebrow">Já sorteadas</p>
+    <h2>Rodadas anteriores</h2>
+    <div id="pastRounds" style="margin-top:14px"></div>
   </div>
 </section>
 
@@ -464,11 +524,18 @@ const CONFIG = {
 
 const PLAYERS = ["ART","AMA","ZÉF","ZÉB","OTA","PED","REY"];
 const DEADLINE = "2026-11-15";
+
+/* Sorteio: primeira sexta-feira do rodízio e prazo de cada confronto. */
+const PRIMEIRA_SEXTA = "2026-08-28";
+const PRAZO_DIAS = 15;
 const POLL_MS = 20000;
 
 const configured = !!(CONFIG.SUPABASE_URL && CONFIG.SUPABASE_ANON_KEY);
 let memoryGames = [];
+let memoryRounds = [];
 let games = [];
+let rounds = [];
+let sorteando = false;
 let busy = false;
 let editingId = null;
 
@@ -493,12 +560,18 @@ async function api(qs, options){
   }
   return res;
 }
-async function fetchGames(){
-  if(!configured) return {ok:true, games:memoryGames.slice()};
+async function fetchAll(){
+  if(!configured) return {ok:true, games:memoryGames.slice(), rounds:memoryRounds.slice()};
   try{
     const res = await api("?select=id,payload&order=data.desc", {headers:headers()});
     const rows = await res.json();
-    return {ok:true, games: rows.map(r=>Object.assign({id:r.id}, r.payload||{}))};
+    const gs=[], rs=[];
+    rows.forEach(r=>{
+      const p=r.payload||{};
+      if(p.kind==="rodada") rs.push(Object.assign({id:r.id}, p));
+      else gs.push(Object.assign({id:r.id}, p));
+    });
+    return {ok:true, games:gs, rounds:rs};
   }catch(e){
     return {ok:false, error:e.message};
   }
@@ -529,6 +602,27 @@ async function removeAll(){
   await api("?id=not.is.null", {method:"DELETE", headers:headers({"Prefer":"return=minimal"})});
 }
 
+/* grava a rodada sorteada; se outra pessoa gravou primeiro, o banco recusa
+   pela chave duplicada e o sorteio dela é o que vale */
+async function gravarRodada(indice, r){
+  const linha={
+    id: idRodada(indice),
+    data: isoDate(sextaDoIndice(indice)),
+    payload: {kind:"rodada", indice, confrontos:r.confrontos, folga:r.folga,
+              novoCiclo:!!r.novoCiclo, sorteadoEm:new Date().toISOString()},
+    updated_at: new Date().toISOString()
+  };
+  if(!configured){
+    if(!memoryRounds.some(x=>x.indice===indice)) memoryRounds.push(Object.assign({id:linha.id}, linha.payload));
+    return;
+  }
+  await api("", {method:"POST", headers:headers({"Prefer":"return=minimal"}), body:JSON.stringify([linha])});
+}
+async function apagarRodada(indice){
+  if(!configured){ memoryRounds=memoryRounds.filter(x=>x.indice!==indice); return; }
+  await api("?id=eq."+encodeURIComponent(idRodada(indice)), {method:"DELETE", headers:headers({"Prefer":"return=minimal"})});
+}
+
 /* ---------- sincronização ---------- */
 
 function hhmm(){
@@ -557,7 +651,7 @@ async function refresh(manual){
   if(busy) return false;
   setBusy(true);
   setStatus("sincronizando","busy");
-  const r = await fetchGames();
+  const r = await fetchAll();
   setBusy(false);
   if(!r.ok){
     setStatus("sem conexão","warn");
@@ -565,7 +659,9 @@ async function refresh(manual){
     return false;
   }
   games = r.games;
+  rounds = r.rounds;
   renderAll();
+  garantirRodada();
   setStatus(configured?("atualizado "+hhmm()):("sem gravação "+hhmm()));
   return true;
 }
@@ -781,7 +877,217 @@ function renderFinals(){
     </div>`;
 }
 
-function renderAll(){ renderLeader(); renderRanking(); renderHistory(); renderFinals(); }
+/* ---------- rodadas e sorteio ---------- */
+
+/* Rodadas que aconteceram antes do site existir. Ficam fixas no código;
+   as próximas são sorteadas na sexta e gravadas na base. */
+const RODADAS_INICIAIS = [
+  {indice:0, confrontos:[["ZÉB","OTA"],["ART","ZÉF"],["REY","PED"]], folga:"AMA", novoCiclo:true},
+  {indice:1, confrontos:[["AMA","ART"],["PED","ZÉB"],["OTA","REY"]], folga:"ZÉF"}
+];
+
+function parseDate(s){ const [y,m,d]=String(s).split("-").map(Number); return new Date(y,m-1,d); }
+function addDays(dt,n){ const d=new Date(dt); d.setDate(d.getDate()+n); return d; }
+function isoDate(dt){
+  return dt.getFullYear()+"-"+String(dt.getMonth()+1).padStart(2,"0")+"-"+String(dt.getDate()).padStart(2,"0");
+}
+function hoje0(){ const d=new Date(); d.setHours(0,0,0,0); return d; }
+function diasEntre(a,b){ return Math.round((b-a)/86400000); }
+function sextaDoIndice(i){ return addDays(parseDate(PRIMEIRA_SEXTA), i*7); }
+function idRodada(i){ return "rodada-"+isoDate(sextaDoIndice(i)); }
+function indiceAtual(){
+  const d=diasEntre(parseDate(PRIMEIRA_SEXTA), hoje0());
+  return d<0 ? -1 : Math.floor(d/7);
+}
+function fmtDia(dt){
+  const semana=["domingo","segunda","terça","quarta","quinta","sexta","sábado"][dt.getDay()];
+  return semana+" "+String(dt.getDate()).padStart(2,"0")+"/"+String(dt.getMonth()+1).padStart(2,"0");
+}
+function chavePar(a,b){ return [a,b].sort().join("|"); }
+function embaralhar(arr){
+  const a=arr.slice();
+  for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; }
+  return a;
+}
+
+function todasRodadas(){
+  const mapa=new Map();
+  RODADAS_INICIAIS.forEach(r=>mapa.set(r.indice, r));
+  rounds.forEach(r=>{ if(typeof r.indice==="number") mapa.set(r.indice, r); });
+  return Array.from(mapa.values()).sort((a,b)=>a.indice-b.indice);
+}
+function infoRodada(r){
+  const data=sextaDoIndice(r.indice);
+  return Object.assign({}, r, {
+    numero:r.indice+1,
+    data,
+    prazo: r.prazo ? parseDate(r.prazo) : addDays(data, PRAZO_DIAS)
+  });
+}
+function rodadaPorIndice(i){
+  const r=todasRodadas().find(x=>x.indice===i);
+  return r ? infoRodada(r) : null;
+}
+
+/* estado do ciclo: quais duplas já se enfrentaram e quantas folgas cada um teve */
+function estadoCiclo(){
+  let usados=new Set(), folgas={};
+  PLAYERS.forEach(p=>folgas[p]=0);
+  todasRodadas().forEach(r=>{
+    if(r.novoCiclo && r.indice!==0){ usados=new Set(); PLAYERS.forEach(p=>folgas[p]=0); }
+    (r.confrontos||[]).forEach(([a,b])=>usados.add(chavePar(a,b)));
+    if(r.folga) folgas[r.folga]=(folgas[r.folga]||0)+1;
+  });
+  return {usados,folgas};
+}
+function emparelhar(lista, usados){
+  if(!lista.length) return [];
+  const a=lista[0];
+  for(const b of embaralhar(lista.slice(1))){
+    if(usados.has(chavePar(a,b))) continue;
+    const resto=emparelhar(lista.filter(x=>x!==a&&x!==b), usados);
+    if(resto) return [[a,b]].concat(resto);
+  }
+  return null;
+}
+function tentarSorteio(usados, folgas){
+  const minimo=Math.min.apply(null, PLAYERS.map(p=>folgas[p]||0));
+  for(const folga of embaralhar(PLAYERS.filter(p=>(folgas[p]||0)===minimo))){
+    const confrontos=emparelhar(embaralhar(PLAYERS.filter(p=>p!==folga)), usados);
+    if(confrontos) return {confrontos, folga};
+  }
+  return null;
+}
+function sortearRodada(){
+  const st=estadoCiclo();
+  let r=tentarSorteio(st.usados, st.folgas);
+  if(r) return r;
+  const zeradas={}; PLAYERS.forEach(p=>zeradas[p]=0);
+  r=tentarSorteio(new Set(), zeradas);
+  if(r) r.novoCiclo=true;
+  return r;
+}
+
+const tentadas=new Set();
+async function garantirRodada(){
+  const i=indiceAtual();
+  if(i<0 || sorteando || tentadas.has(i)) return;
+  if(sextaDoIndice(i) > parseDate(DEADLINE)) return;
+  if(rodadaPorIndice(i)) return;
+  const r=sortearRodada();
+  if(!r) return;
+  tentadas.add(i);
+  sorteando=true;
+  setStatus("sorteando a rodada","busy");
+  try{
+    await gravarRodada(i, r);
+    toast("Rodada "+(i+1)+" sorteada.");
+  }catch(e){ /* alguém sorteou primeiro; o sorteio dessa pessoa é o que vale */ }
+  sorteando=false;
+  const dados=await fetchAll();
+  if(dados.ok){ games=dados.games; rounds=dados.rounds; renderAll(); }
+  setStatus(configured?("atualizado "+hhmm()):("sem gravação "+hhmm()));
+}
+
+async function refazerSorteio(i){
+  if(!confirm("Refazer o sorteio da rodada "+(i+1)+"? Os confrontos mudam para todos os participantes.")) return;
+  tentadas.delete(i);
+  await run(async()=>{
+    await apagarRodada(i);
+    const dados=await fetchAll();
+    if(dados.ok){ rounds=dados.rounds; games=dados.games; }
+    const r=sortearRodada();
+    if(!r) throw new Error("não foi possível montar a rodada.");
+    await gravarRodada(i, r);
+    tentadas.add(i);
+  }, "Rodada sorteada de novo.");
+}
+
+/* ---------- status de cada confronto ---------- */
+
+function jogoDoConfronto(par, rodada){
+  const [a,b]=par;
+  return games.find(g=>{
+    if(!( (g.p1===a&&g.p2===b) || (g.p1===b&&g.p2===a) )) return false;
+    if(!g.date) return false;
+    const d=parseDate(g.date);
+    return d>=rodada.data && d<=addDays(rodada.prazo,10);
+  });
+}
+function statusConfronto(par, rodada){
+  const g=jogoDoConfronto(par, rodada);
+  if(g){
+    if(g.type==="wo") return {classe:"done", texto:"W.O. "+g.woWinner};
+    const s=getGameSummary(g);
+    return {classe:"done", texto:s.points[g.p1]+" a "+s.points[g.p2]};
+  }
+  const restam=diasEntre(hoje0(), rodada.prazo);
+  if(restam<0) return {classe:"late", texto:"prazo vencido"};
+  if(restam===0) return {classe:"late", texto:"vence hoje"};
+  return {classe:"", texto:restam+" dia"+(restam===1?"":"s")};
+}
+function htmlConfrontos(rodada){
+  return rodada.confrontos.map(par=>{
+    const st=statusConfronto(par, rodada);
+    return `<div class="fixture">
+      <div class="fixture-players">${esc(par[0])}<span>contra</span>${esc(par[1])}</div>
+      <div class="chip ${st.classe}">${esc(st.texto)}</div>
+    </div>`;
+  }).join("");
+}
+
+/* ---------- render ---------- */
+
+function renderRodadas(){
+  const i=indiceAtual();
+  const box=document.getElementById("currentRound");
+  const week=document.getElementById("weekCard");
+  const proxBox=document.getElementById("nextRounds");
+  const encerrado = i<0 ? false : sextaDoIndice(i) > parseDate(DEADLINE);
+
+  if(encerrado){
+    const txt=`<p class="hint">O rodízio terminou em 15/11/2026. Daqui em diante vale o Finals.</p>`;
+    box.innerHTML=txt; week.innerHTML=`<p class="eyebrow">Rodízio encerrado</p>`+txt;
+    proxBox.innerHTML=`<p class="empty">Não há mais sorteios nesta temporada.</p>`;
+  }else{
+    const r=i>=0 ? rodadaPorIndice(i) : null;
+    if(!r){
+      const txt=sorteando
+        ? `<p class="hint">Sorteando a rodada desta semana…</p>`
+        : `<p class="hint">A rodada desta semana ainda não foi sorteada. Ela aparece assim que alguém abrir o site na sexta.</p>`;
+      box.innerHTML=txt; week.innerHTML=`<p class="eyebrow">Rodada da semana</p>`+txt;
+    }else{
+      const cab=`<div class="round-head">
+          <div class="round-no">Rodada ${r.numero}</div>
+          <div class="round-when">sorteada em <b>${fmtDia(r.data)}</b> • jogar até <b>${fmtDia(r.prazo)}</b></div>
+        </div>`;
+      const corpo=htmlConfrontos(r)+`<div class="bye">Folga nesta rodada: <b>${esc(r.folga)}</b></div>`;
+      box.innerHTML=cab+corpo+
+        `<div class="actions"><button class="btn mini" onclick="refazerSorteio(${r.indice})">Refazer o sorteio</button></div>`;
+      week.innerHTML=`<p class="eyebrow">Rodada ${r.numero} • jogar até ${fmtDia(r.prazo)}</p>`+corpo;
+    }
+    const prox=sextaDoIndice(Math.max(i,0)+1);
+    proxBox.innerHTML = prox<=parseDate(DEADLINE)
+      ? `<p class="hint">O próximo sorteio acontece na <b>${fmtDia(prox)}</b>. Os confrontos só aparecem no dia, sorteados entre quem ainda não se enfrentou neste ciclo.</p>`
+      : `<p class="empty">Esta é a última rodada antes do congelamento do ranking.</p>`;
+  }
+
+  const anteriores=todasRodadas().filter(x=>x.indice < i).map(infoRodada).sort((a,b)=>b.indice-a.indice);
+  document.getElementById("pastRounds").innerHTML = anteriores.length
+    ? anteriores.map(x=>{
+        const feitos=x.confrontos.filter(p=>jogoDoConfronto(p,x)).length;
+        return `<div class="mini-round">
+          <div class="mini-when">${fmtDia(x.data)}</div>
+          <div class="mini-list">${x.confrontos.map(p=>{
+              const g=jogoDoConfronto(p,x);
+              return esc(p[0])+" x "+esc(p[1])+(g?"":" <em>(não jogado)</em>");
+            }).join(" • ")} <em>• folga ${esc(x.folga)} • ${feitos} de ${x.confrontos.length} realizados</em></div>
+        </div>`;
+      }).join("")
+    : `<p class="empty">Nenhuma rodada anterior.</p>`;
+}
+
+function renderAll(){ renderLeader(); renderRanking(); renderHistory(); renderFinals(); renderRodadas(); }
 
 /* ---------- formulário ---------- */
 
