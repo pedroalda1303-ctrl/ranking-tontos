@@ -334,7 +334,7 @@ footer{max-width:960px;margin:0 auto;padding:0 20px 48px;color:var(--cream-2);
   <div class="card">
     <p class="eyebrow">Resultado</p>
     <h2>Lançar jogo</h2>
-    <p class="hint">O placar aparece para todos os participantes assim que você salva.</p>
+    <p class="hint">O placar aparece para todos os participantes assim que você salva. A lista de rodadas traz apenas as que ainda estão dentro do prazo de 15 dias.</p>
 
     <div class="row2" style="margin-top:18px">
       <div class="field"><label>Rodada</label><select id="gameRound"></select></div>
@@ -1097,16 +1097,25 @@ function renderRodadas(){
     : `<p class="empty">Nenhuma rodada anterior.</p>`;
 }
 
-function renderOpcoesRodada(){
+function rodadaFechada(r){ return hoje0() > r.prazo; }
+
+/* só rodadas dentro do prazo aceitam lançamento.
+   incluir: índice de uma rodada já encerrada que precisa aparecer
+   porque o jogo em edição pertence a ela. */
+function renderOpcoesRodada(incluir){
   const sel=document.getElementById("gameRound");
   if(!sel) return;
   const atual=indiceAtual();
   const escolhido = sel.value!=="" ? sel.value : String(atual>=0?atual:"");
-  const lista=todasRodadas().map(infoRodada).sort((a,b)=>b.indice-a.indice);
-  sel.innerHTML = lista.map(r=>
-      `<option value="${r.indice}">Rodada ${r.numero} • sorteada em ${fmtDia(r.data).replace(/^\w+ /,"")}${r.indice===atual?" • atual":""}</option>`
-    ).join("") + `<option value="">Amistoso, fora do ranking</option>`;
-  sel.value = Array.from(sel.options).some(o=>o.value===escolhido) ? escolhido : (lista[0]?String(lista[0].indice):"");
+  const todas=todasRodadas().map(infoRodada).sort((a,b)=>b.indice-a.indice);
+  const lista=todas.filter(r=>!rodadaFechada(r) || r.indice===incluir);
+  sel.innerHTML = lista.map(r=>{
+      const dia=fmtDia(r.data).replace(/^\w+ /,"");
+      const marca = rodadaFechada(r) ? " • encerrada" : (r.indice===atual ? " • atual" : "");
+      return `<option value="${r.indice}">Rodada ${r.numero} • sorteada em ${dia}${marca}</option>`;
+    }).join("") + `<option value="">Amistoso, fora do ranking</option>`;
+  const alvo = (incluir!==undefined && incluir!==null) ? String(incluir) : escolhido;
+  sel.value = Array.from(sel.options).some(o=>o.value===alvo) ? alvo : (lista[0]?String(lista[0].indice):"");
 }
 
 function renderAll(){ renderLeader(); renderRanking(); renderHistory(); renderFinals(); renderRodadas(); renderOpcoesRodada(); }
@@ -1147,6 +1156,10 @@ async function saveGame(){
 
   if(g.rodada!==null){
     const r=rodadaPorIndice(g.rodada);
+    if(r && rodadaFechada(r) && !editingId){
+      toast("A rodada "+r.numero+" encerrou em "+fmtDia(r.prazo)+" e não aceita mais lançamentos.", true);
+      return;
+    }
     const previsto = r && r.confrontos.some(par=>
       (par[0]===p1&&par[1]===p2)||(par[0]===p2&&par[1]===p1));
     if(r && !previsto &&
@@ -1193,6 +1206,7 @@ function editGame(id){
   const g=games.find(x=>x.id===id); if(!g)return;
   editingId=id;
   document.getElementById("gameDate").value=g.date||"";
+  renderOpcoesRodada(typeof g.rodada==="number" ? g.rodada : undefined);
   document.getElementById("gameRound").value = (typeof g.rodada==="number") ? String(g.rodada) : "";
   document.getElementById("gameType").value=g.type;
   document.getElementById("p1").value=g.p1;
